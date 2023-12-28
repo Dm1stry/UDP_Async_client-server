@@ -9,7 +9,7 @@ int UDPServer::communicationType()
     return SOCK_DGRAM;
 }
 
-void UDPServer::socketManipulations()
+void UDPServer::serverSocketManipulations()
 {
     server_data_.read_event = event_new(ev_base_, server_data_.fd, EV_READ | EV_PERSIST, invokeOnRead, (void*)this);
 

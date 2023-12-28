@@ -9,7 +9,7 @@ public:
     UDPServer();
 
 protected:
-    void socketManipulations();
+    void serverSocketManipulations();
     int communicationType();
 private:
     static void invokeOnRead(int client_descriptor, short flags, void *arg);
