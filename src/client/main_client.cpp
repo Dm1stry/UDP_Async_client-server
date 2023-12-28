@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "udpclient.hpp"
+#include "tcpclient.hpp"
 
 int main(int argc, char * argv[])
 {
-    UDPClient client;
+    TCPClient client;
     client.setHost("127.0.0.1");
     client.setHostPort(49160);
     client.setPort(49161);

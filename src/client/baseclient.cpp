@@ -1,7 +1,8 @@
 #include "baseclient.hpp"
 
 BaseClient::BaseClient()
-  : buffer_("")
+  : buffer_(""),
+    host_ip_(new char[16])
 {
     
 }
@@ -13,10 +14,7 @@ BaseClient::~BaseClient()
 
 void BaseClient::setHost(std::string host_ip)
 {
-    if(!host_ip_)
-    {
-        host_ip_ = new char[16];
-    }
+    bzero(host_ip_, 16);
     strcpy(host_ip_, host_ip.c_str());
 }
 
