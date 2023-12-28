@@ -62,7 +62,6 @@ void TCPServer::run()
     }
 
     clearSocketData(server_data_);
-    event_base_free(ev_base_);
 }
 
 void TCPServer::invokeOnAccept(int server_descriptor, short flags, void *arg)

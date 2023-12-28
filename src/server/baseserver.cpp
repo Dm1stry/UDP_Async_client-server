@@ -5,7 +5,13 @@ BaseServer::BaseServer()
 {}
 
 BaseServer::~BaseServer()
-{}
+{
+    delete[] ip_;
+    ip_ = nullptr;
+    delete converter_;
+    converter_ = nullptr;
+    event_base_free(ev_base_);
+}
 
 bool BaseServer::setIP(char * ip)
 {

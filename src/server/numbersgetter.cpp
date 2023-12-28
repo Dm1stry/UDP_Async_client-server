@@ -6,13 +6,13 @@ std::string NumbersGetter::convert(std::string message)
     
     std::vector<LNL::LongInt> numbers;
 
-    numbers.reserve(20);
+    //numbers.reserve(20);
     
     LNL::LongInt sum {0};
     LNL::LongInt number {0};
     for(auto it = message.begin(); it < message.end(); ++it)
     {
-        if((char)*it >= 48 && (char)*it <= 57)
+        if((char)(*it) >= 48 && (char)(*it) <= 57)
         {
             current_number += *it;
             if(it + 1 == message.end() || (char)*(it + 1) < 48 || (char)*(it + 1) > 57)

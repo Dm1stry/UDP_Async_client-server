@@ -68,10 +68,18 @@ void UDPServer::onRead(int client_descriptor, short flags)
     SocketData client_data;
     client_data.fd = client_descriptor;
 
-    bytes = recvfrom(client_descriptor, client_data.buffer, BUFFER_SIZE, MSG_WAITALL, (struct sockaddr *)&cliaddr, &size);
+    bytes = recvfrom(client_descriptor, client_data.buffer, BUFFER_SIZE, 0, (struct sockaddr *)&cliaddr, &size);
 
     std::string message(client_data.buffer);
-    size_t substr_len = message.find("\n") + 1;
+    size_t substr_len = message.find("\n");
+    if(substr_len == std::string::npos)
+    {
+        substr_len = message.length();
+    }
+    else
+    {
+        substr_len += 1;
+    }
     message = message.substr(0, substr_len);
 
     client_data.message = converter_->convert(message);
@@ -97,7 +105,7 @@ void UDPServer::onWrite(int client_descriptor, short flags)
     ssize_t bytes;
     socklen_t size = sizeof(struct sockaddr);
     for(;;) {
-        bytes = sendto(client_descriptor, client_data.message.c_str(), client_data.message.length(), MSG_CONFIRM, (sockaddr *)&(client_data.cliaddr), size);
+        bytes = sendto(client_descriptor, client_data.message.c_str(), client_data.message.length(), 0, (sockaddr *)&(client_data.cliaddr), size);
         if(bytes <= 0) {
             if(errno == EINTR)
                 continue;
@@ -114,6 +122,7 @@ void UDPServer::onWrite(int client_descriptor, short flags)
     {
         error("event_del() failed");
     }
+    client_data.message = "";
 }
 
 void UDPServer::clearSocketData(SocketData& data)
@@ -122,12 +131,14 @@ void UDPServer::clearSocketData(SocketData& data)
     {
         event_del(data.read_event);
         event_free(data.read_event);
+        data.read_event = nullptr;
     }
 
     if(data.write_event) {
         event_del(data.write_event);
         event_free(data.write_event);
+        data.write_event = nullptr;
     }
-
+    data.message = "";
     close(data.fd);
 }
