@@ -25,7 +25,6 @@ class BaseServer
 {
 public:
     BaseServer();
-    //BaseServer(IPv ip_version = BaseServer::IPv::IPv4);
     virtual ~BaseServer();
 
     struct SocketData
