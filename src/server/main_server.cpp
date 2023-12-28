@@ -6,7 +6,7 @@
 
 int main() //int argc, char * argv[])
 {
-    UDPServer server;
+    TCPServer server;
     //char ip[16] = "127.0.0.1";
     std::string ip = "127.0.0.1";
     server.setIP(ip);

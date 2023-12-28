@@ -48,6 +48,7 @@ void TCPClient::sendMessage(std::string message)
     std::cout << bytes;
     std::cout << "Message sent: " << message << '\n';
     bzero(buffer_, BUFFER_SIZE);
+    
     ssize_t len = recv(client_descriptor_, buffer_, BUFFER_SIZE, 0);
     buffer_[len] = '\0';
     std::cout << "Response received:\n" << std::string(buffer_, len) << '\n';

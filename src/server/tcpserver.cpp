@@ -147,6 +147,7 @@ void TCPServer::onRead(int client_descriptor, short flags)
     {
         error("event_add(peer->write_event, ...) failed");
     }
+    bzero(client_data.buffer, BUFFER_SIZE);
 }
 
 void TCPServer::invokeOnWrite(int client_descriptor, short flags, void *arg)
