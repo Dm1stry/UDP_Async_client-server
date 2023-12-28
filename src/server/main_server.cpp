@@ -34,13 +34,15 @@ int main(int argc, char * argv[])
     {
         std::cout << "Usage:\n ./Server [UDP/TCP] [ip] [port]\n";
     }
-
-    BaseServer * server = create_server(argv[0]);
-    //char ip[16] = "127.0.0.1";
-    std::string ip = argv[1];
-    server->setIP(ip);
-    uint port = atoi(argv[2]);
-    server->setPort(port);
-    server->setDataConverter(new NumbersGetter);
-    server->run();
+    else
+    {
+        BaseServer * server = create_server(argv[1]);
+        std::string ip = argv[2];
+        
+        server->setIP(ip);
+        uint port = atoi(argv[3]);
+        server->setPort(port);
+        server->setDataConverter(new NumbersGetter);
+        server->run();
+    }
 }
