@@ -10,17 +10,10 @@ class TCPServer : public BaseServer
 {
 public:
     TCPServer();
-    void run();
 
-    struct SocketData
-    {
-        event *read_event = nullptr;
-        event *write_event = nullptr;
-        char buffer[BUFFER_SIZE];
-        ssize_t message_len = 0;
-        std::string message;
-        int fd;    
-    };
+protected:
+    void serverSocketManipulations();
+    inline virtual int communicationType();
 
 private:
     static void invokeOnAccept(int server_descriptor, short flags, void *arg);
@@ -30,11 +23,6 @@ private:
     void onAccept(int server_descriptor, short flags);
     void onRead(int client_descriptor, short flags);
     void onWrite(int client_descriptor, short flags);
-
-    void clearSocketData(SocketData& data);
-
-    SocketData server_data_;
-    std::unordered_map <int, SocketData> clients_data_;
 };
 
 #endif

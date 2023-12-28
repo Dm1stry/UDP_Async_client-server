@@ -28,10 +28,11 @@ public:
     void setHost(std::string ip);
     void setHostPort(uint port);
     void setPort(uint port);
-    virtual void createConnection() = 0;
     void run();
-    virtual void sendMessage(std::string message) = 0;
 protected:
+    virtual void createConnection() = 0;
+    virtual void sendMessage(std::string message) = 0;
+
     char * host_ip_;
     uint host_port_;
     uint port_;

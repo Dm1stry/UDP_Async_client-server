@@ -8,6 +8,7 @@ class UDPClient : public BaseClient
 {
 public:
     UDPClient();
+protected:
     void createConnection();
     void sendMessage(std::string message);
 };

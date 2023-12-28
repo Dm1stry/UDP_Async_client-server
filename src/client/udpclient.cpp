@@ -32,9 +32,9 @@ void UDPClient::createConnection()
 void UDPClient::sendMessage(std::string message)
 {
     std::fill(buffer_, buffer_ + BUFFER_SIZE, '\0');
-    sendto(client_descriptor_, message.c_str(), message.length(), 0, (const struct sockaddr *) &server_addr_, sizeof(server_addr_));
+    sendto(client_descriptor_, message.data(), message.size(), 0, (const struct sockaddr *) &server_addr_, sizeof(server_addr_));
 
-    std::cout << "Massage sent: " << message << '\n';
+    std::cout << "Message sent: " << message << '\n';
     socklen_t len;
     ssize_t bytes;
 

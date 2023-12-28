@@ -7,6 +7,7 @@ class TCPClient : public BaseClient
 {
 public:
     TCPClient();
+protected:
     void createConnection();
     void sendMessage(std::string message);
 };

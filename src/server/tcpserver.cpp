@@ -1,44 +1,19 @@
 #include "tcpserver.hpp"
 
-
 TCPServer::TCPServer()
   : BaseServer()
 {}
 
-void TCPServer::run()
+int TCPServer::communicationType()
 {
-    server_data_.fd = socket(AF_INET, SOCK_STREAM, 0);
+    return SOCK_STREAM;
+}
 
-    if(server_data_.fd < 0)
-    {
-        error("socket() failed");
-    }
-
-    if(evutil_make_socket_nonblocking(server_data_.fd) < 0)
-    {
-        error("evutil_make_socket_nonblocking() failed");
-    }
-
-    struct sockaddr_in sin;
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(port_);
-    sin.sin_addr.s_addr = inet_addr(ip_);
-
-    std::cout << "port: " << port_ << ", ip: " << ip_ << '\n'; 
-
-    if(bind(server_data_.fd, (struct sockaddr*)&sin, sizeof(sin)) < 0)
-    {
-        error("bind() failed");
-    }
-
+void TCPServer::serverSocketManipulations()
+{
     if(listen(server_data_.fd, 1000) < 0)
     {
         error("listen() failed");
-    }
-
-    if(!ev_base_)
-    {
-        error("empty event_base");
     }
 
     struct event* accept_event = event_new(ev_base_, server_data_.fd,
@@ -52,13 +27,6 @@ void TCPServer::run()
     {
         error("event_add() failed");
     }
-
-    if(event_base_dispatch(ev_base_) < 0)
-    {
-        error("event_base_dispatch() failed");
-    }
-
-    clearSocketData(server_data_);
 }
 
 void TCPServer::invokeOnAccept(int server_descriptor, short flags, void *arg)
@@ -116,16 +84,17 @@ void TCPServer::invokeOnRead(int client_descriptor, short flags, void *arg)
 void TCPServer::onRead(int client_descriptor, short flags)
 {
     SocketData& client_data = clients_data_[client_descriptor];
+    int message_len;
     for(;;)
     {
-        client_data.message_len = read(client_descriptor, client_data.buffer, BUFFER_SIZE);
-        if(client_data.message_len == 0) 
+        message_len = read(client_descriptor, client_data.buffer, BUFFER_SIZE);
+        if(message_len == 0) 
         {
             clearSocketData(client_data);
             clients_data_.erase(client_descriptor);
             return;
         }
-        if(client_data.message_len < 0) {
+        if(message_len < 0) {
             if(errno == EINTR)
                 continue;
 
@@ -178,20 +147,3 @@ void TCPServer::onWrite(int client_descriptor, short flags)
         error("event_del() failed");
     }
 }
-
-void TCPServer::clearSocketData(SocketData& data)
-{
-    if(data.read_event)
-    {
-        event_del(data.read_event);
-        event_free(data.read_event);
-    }
-
-    if(data.write_event) {
-        event_del(data.write_event);
-        event_free(data.write_event);
-    }
-
-    close(data.fd);
-}
-
