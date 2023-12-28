@@ -5,7 +5,6 @@
 #include <unordered_map>
 
 #include "baseserver.hpp"
-#include "dataconverter.hpp"
 
 #define BUFFER_SIZE 1024
 
@@ -15,7 +14,6 @@ public:
     TCPServer();
     virtual ~TCPServer();
     void run();
-    void setDataConverter(DataConverter * converter);
 
     struct SocketData
     {
@@ -40,8 +38,6 @@ private:
 
     SocketData server_data_;
     std::unordered_map <int, SocketData> clients_data_;
-
-    DataConverter * converter_;
 };
 
 #endif

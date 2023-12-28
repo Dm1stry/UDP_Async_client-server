@@ -26,3 +26,8 @@ bool BaseServer::setPort(uint port)
     port_ = port;
     return true;
 }
+
+void BaseServer::setDataConverter(DataConverter * converter)
+{
+    converter_ = converter;
+}

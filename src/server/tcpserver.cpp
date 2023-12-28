@@ -197,7 +197,3 @@ void TCPServer::clearSocketData(SocketData& data)
     close(data.fd);
 }
 
-void TCPServer::setDataConverter(DataConverter * converter)
-{
-    converter_ = converter;
-}

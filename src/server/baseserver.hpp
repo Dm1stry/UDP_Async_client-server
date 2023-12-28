@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 
-
+#include "dataconverter.hpp"
 #include "../error.hpp"
 
 
@@ -31,6 +31,7 @@ public:
     bool setIP(std::string ip);
     bool setIP(char * ip);
     bool setPort(uint port);
+    void setDataConverter(DataConverter * converter);
 
     virtual void run() = 0;
 protected:
@@ -38,6 +39,8 @@ protected:
     uint port_;
 
     event_base * ev_base_;
+
+    DataConverter * converter_;
 };
 
 #endif
