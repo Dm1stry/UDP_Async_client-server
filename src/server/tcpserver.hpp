@@ -10,7 +10,6 @@ class TCPServer : public BaseServer
 {
 public:
     TCPServer();
-    virtual ~TCPServer();
     void run();
 
     struct SocketData

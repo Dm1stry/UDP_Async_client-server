@@ -5,9 +5,6 @@ TCPServer::TCPServer()
   : BaseServer()
 {}
 
-TCPServer::~TCPServer()
-{}
-
 void TCPServer::run()
 {
     server_data_.fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -140,8 +137,9 @@ void TCPServer::onRead(int client_descriptor, short flags)
     }
 
     std::string message(client_data.buffer);
-    size_t substr_len = message.find("\n") + 1;
-    message = message.substr(0, substr_len);
+    std::cout << "Message from client fd = " << client_data.fd << ": " << message << '\n';
+    //size_t substr_len = message.find("\n") + 1;
+    //message = message.substr(0, substr_len);
 
     client_data.message = converter_->convert(message);
 
