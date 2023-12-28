@@ -6,8 +6,6 @@
 
 #include "baseserver.hpp"
 
-#define BUFFER_SIZE 1024
-
 class TCPServer : public BaseServer
 {
 public:
