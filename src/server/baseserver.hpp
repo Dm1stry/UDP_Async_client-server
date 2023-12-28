@@ -15,11 +15,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-
 #include "dataconverter.hpp"
 #include "../error.hpp"
 
-
+#define BUFFER_SIZE 1024
 
 class BaseServer
 {
