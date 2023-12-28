@@ -46,6 +46,7 @@ set(SERVER_SOURCES
 set(
     CLIENT_SOURCES
     ${CLIENT_FOLDER}/main_client.cpp
+    ${CLIENT_FOLDER}/baseclient.cpp         ${CLIENT_FOLDER}/baseclient.hpp
     ${CLIENT_FOLDER}/udpclient.cpp          ${CLIENT_FOLDER}/udpclient.hpp
     ${CLIENT_FOLDER}/tcpclient.cpp          ${CLIENT_FOLDER}/tcpclient.hpp
 )
@@ -60,5 +61,6 @@ target_link_libraries(${SERVER_NAME} ${LIBEVENT2_CORE})
 add_executable(
     ${CLIENT_NAME}
     ${CLIENT_SOURCES}
+	${GENERAL_SOURCES}
 )
 
