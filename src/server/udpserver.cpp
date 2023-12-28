@@ -4,54 +4,19 @@ UDPServer::UDPServer()
   : BaseServer()
 {}
 
-UDPServer::~UDPServer()
-{}
-
-void UDPServer::run()
+int UDPServer::communicationType()
 {
-    server_data_.fd = socket(AF_INET, SOCK_DGRAM, 0);
+    return SOCK_DGRAM;
+}
 
-    if(server_data_.fd < 0)
-    {
-        error("socket() failed");
-    }
-
-    if(evutil_make_socket_nonblocking(server_data_.fd) < 0)
-    {
-        error("evutil_make_socket_nonblocking() failed");
-    }
-
-    struct sockaddr_in sin;
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(port_);
-    sin.sin_addr.s_addr = inet_addr(ip_);
-
-    std::cout << "port: " << port_ << ", ip: " << ip_ << '\n'; 
-
-    if(bind(server_data_.fd, (struct sockaddr*)&sin, sizeof(sin)) < 0)
-    {
-        error("bind() failed");
-    }
-
-    if(!ev_base_)
-    {
-        error("empty event_base");
-    }
-
+void UDPServer::socketManipulations()
+{
     server_data_.read_event = event_new(ev_base_, server_data_.fd, EV_READ | EV_PERSIST, invokeOnRead, (void*)this);
 
     if(event_add(server_data_.read_event, NULL) < 0)
     {
         error("event_add() failed");
     }
-
-    if(event_base_dispatch(ev_base_) < 0)
-    {
-        error("event_base_dispatch() failed");
-    }
-
-    clearSocketData(server_data_);
-    event_base_free(ev_base_);
 }
 
 void UDPServer::invokeOnRead(int client_descriptor, short flags, void *arg)
@@ -92,6 +57,7 @@ void UDPServer::onRead(int client_descriptor, short flags)
     }
     client_data.cliaddr = cliaddr;
     clients_data_[client_descriptor] = client_data;
+    bzero(client_data.buffer, BUFFER_SIZE);
 }
 
 void UDPServer::invokeOnWrite(int client_descriptor, short flags, void *arg)
@@ -123,22 +89,4 @@ void UDPServer::onWrite(int client_descriptor, short flags)
         error("event_del() failed");
     }
     client_data.message = "";
-}
-
-void UDPServer::clearSocketData(SocketData& data)
-{
-    if(data.read_event)
-    {
-        event_del(data.read_event);
-        event_free(data.read_event);
-        data.read_event = nullptr;
-    }
-
-    if(data.write_event) {
-        event_del(data.write_event);
-        event_free(data.write_event);
-        data.write_event = nullptr;
-    }
-    data.message = "";
-    close(data.fd);
 }
